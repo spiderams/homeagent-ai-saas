@@ -13,7 +13,7 @@ function Dashboard() {
 
   useEffect(() => {
 
-    fetch("https://localhost:32769/api/leads")
+    fetch(`${import.meta.env.VITE_API_URL}/api/chat`)
       .then(res => res.json())
       .then(data => {
 

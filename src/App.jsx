@@ -36,7 +36,7 @@ function App() {
       // API CALL
 
       const response = await fetch(
-        "https://localhost:32769/api/chat",
+        `${import.meta.env.VITE_API_URL}/api/chat`,
         {
           method: "POST",
 
