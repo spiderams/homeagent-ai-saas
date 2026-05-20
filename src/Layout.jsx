@@ -149,9 +149,7 @@ function Layout() {
           >
 
             🏠 Dashboard
-onClick={() =>
-  setMobileMenu(false)
-}
+
           </Link>
 
           {/* CHAT */}
@@ -176,9 +174,7 @@ onClick={() =>
                 "scale(1)";
             }}
           >
-onClick={() =>
-  setMobileMenu(false)
-}
+
             💬 Chat
 
           </Link>
@@ -196,9 +192,7 @@ onClick={() =>
                   ? "#2563eb"
                   : "#1e293b"
             }}
-            onClick={() =>
-  setMobileMenu(false)
-}
+        
             onMouseEnter={(e) => {
               e.target.style.transform =
                 "scale(1.03)";
