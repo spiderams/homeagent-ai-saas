@@ -5,7 +5,12 @@ import {
 } from "react-router-dom";
 
 import { useState } from "react";
-
+import {
+  SignedIn,
+  SignedOut,
+  SignInButton,
+  UserButton
+} from "@clerk/react";
 function Layout() {
 
   const location = useLocation();
@@ -96,6 +101,7 @@ function Layout() {
           }}
         >
           HomeAgent AI
+          
         </h1>
 
         {/* NAVIGATION */}
@@ -108,6 +114,17 @@ function Layout() {
           }}
         >
 
+  <SignedOut>
+
+    <SignInButton />
+
+  </SignedOut>
+
+  <SignedIn>
+
+    <UserButton />
+
+  </SignedIn>
           {/* DASHBOARD */}
 
           <Link
@@ -132,7 +149,9 @@ function Layout() {
           >
 
             🏠 Dashboard
-
+onClick={() =>
+  setMobileMenu(false)
+}
           </Link>
 
           {/* CHAT */}
@@ -157,7 +176,9 @@ function Layout() {
                 "scale(1)";
             }}
           >
-
+onClick={() =>
+  setMobileMenu(false)
+}
             💬 Chat
 
           </Link>
@@ -175,6 +196,9 @@ function Layout() {
                   ? "#2563eb"
                   : "#1e293b"
             }}
+            onClick={() =>
+  setMobileMenu(false)
+}
             onMouseEnter={(e) => {
               e.target.style.transform =
                 "scale(1.03)";
@@ -201,8 +225,69 @@ function Layout() {
           width: "100%"
         }}
       >
+{/* PAGE CONTENT */}
 
-        <Outlet />
+<div
+  style={{
+    flex: 1,
+    width: "100%",
+    padding: "20px"
+  }}
+>
+
+  <SignedOut>
+
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        minHeight: "100vh"
+      }}
+    >
+
+      <SignInButton mode="modal">
+
+        <button
+          style={{
+            padding: "16px 24px",
+            borderRadius: "12px",
+            border: "none",
+            backgroundColor: "#2563eb",
+            color: "white",
+            fontWeight: "bold",
+            cursor: "pointer",
+            fontSize: "18px"
+          }}
+        >
+          Login to HomeAgent AI
+        </button>
+
+      </SignInButton>
+
+    </div>
+
+  </SignedOut>
+
+  <SignedIn>
+
+    <div
+      style={{
+        marginBottom: "20px",
+        display: "flex",
+        justifyContent: "flex-end"
+      }}
+    >
+
+      <UserButton />
+
+    </div>
+
+    <Outlet />
+
+  </SignedIn>
+
+</div>
 
       </div>
 

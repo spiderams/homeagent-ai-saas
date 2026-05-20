@@ -14,7 +14,7 @@ import Settings from './Settings.jsx';
 import Layout from './Layout.jsx';
 
 import './index.css';
-
+import { ClerkProvider } from "@clerk/react";
 ReactDOM.createRoot(
   document.getElementById('root')
 ).render(
@@ -38,10 +38,13 @@ ReactDOM.createRoot(
 
           {/* HOME */}
 
-          <Route
-            path="/"
-            element={<Dashboard />}
-          />
+        <Route
+  path="*"
+  element={
+    <Navigate to="/dashboard" />
+  }
+/>
+<Suspense fallback={<div>Loading...</div>}></Suspense>
 
           {/* CHAT */}
 
