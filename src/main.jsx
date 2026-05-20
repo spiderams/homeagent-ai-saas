@@ -1,11 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { Toaster } from "react-hot-toast";
+
 import {
   BrowserRouter,
   Routes,
-  Route
+  Route,
+  Navigate
 } from "react-router-dom";
+
+import { ClerkProvider } from "@clerk/react";
+
+import { Toaster } from "react-hot-toast";
 
 import App from './App.jsx';
 import Dashboard from './Dashboard.jsx';
@@ -14,71 +19,71 @@ import Settings from './Settings.jsx';
 import Layout from './Layout.jsx';
 
 import './index.css';
-import { ClerkProvider } from "@clerk/react";
+
+const clerkPubKey =
+  import.meta.env
+    .VITE_CLERK_PUBLISHABLE_KEY;
+
 ReactDOM.createRoot(
   document.getElementById('root')
 ).render(
 
-  <React.StrictMode>
+  <ClerkProvider publishableKey={clerkPubKey}>
 
-    <BrowserRouter>
-      <Toaster
-        position="top-right"
-        toastOptions={{
-          style: {
-            background: "#1e293b",
-            color: "white",
-            border: "1px solid #334155"
-          }
-        }}
-      />
-      <Routes>
+    <React.StrictMode>
 
-        <Route element={<Layout />}>
+      <BrowserRouter>
 
-          {/* HOME */}
+        <Toaster
+          position="top-right"
+          toastOptions={{
+            style: {
+              background: "#1e293b",
+              color: "white",
+              border: "1px solid #334155"
+            }
+          }}
+        />
 
-        <Route
-  path="*"
-  element={
-    <Navigate to="/dashboard" />
-  }
-/>
-<Suspense fallback={<div>Loading...</div>}></Suspense>
+        <Routes>
 
-          {/* CHAT */}
+          <Route element={<Layout />}>
 
-          <Route
-            path="/chat"
-            element={<App />}
-          />
+            <Route
+              path="/chat"
+              element={<App />}
+            />
 
-          {/* DASHBOARD */}
+            <Route
+              path="/dashboard"
+              element={<Dashboard />}
+            />
 
-          <Route
-            path="/dashboard"
-            element={<Dashboard />}
-          />
+            <Route
+              path="/settings"
+              element={<Settings />}
+            />
 
-          {/* SETTINGS */}
+            <Route
+              path="/leads/:id"
+              element={<LeadDetails />}
+            />
 
-          <Route
-            path="/settings"
-            element={<Settings />}
-          />
+            <Route
+              path="*"
+              element={
+                <Navigate to="/dashboard" />
+              }
+            />
 
-          {/* LEAD DETAILS */}
+          </Route>
 
-          <Route
-            path="/leads/:id"
-            element={<LeadDetails />}
-          />
+        </Routes>
 
-        </Route>
+      </BrowserRouter>
 
-      </Routes>
+    </React.StrictMode>
 
-    </BrowserRouter>
+  </ClerkProvider>
 
-  </React.StrictMode>
 );
