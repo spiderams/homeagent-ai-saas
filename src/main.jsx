@@ -19,9 +19,7 @@ import Settings from './Settings.jsx';
 import Layout from './Layout.jsx';
 
 import './index.css';
-<div style={{ color: "white" }}>
-  TEST APP
-</div>
+
 const clerkPubKey =
   import.meta.env
     .VITE_CLERK_PUBLISHABLE_KEY;

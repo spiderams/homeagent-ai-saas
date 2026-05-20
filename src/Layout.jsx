@@ -7,10 +7,9 @@ import {
 import { useState } from "react";
 
 import {
-  SignedIn,
-  SignedOut,
   SignInButton,
-  UserButton
+  UserButton,
+  useUser
 } from "@clerk/react";
 
 function Layout() {
@@ -23,6 +22,8 @@ function Layout() {
   const isMobile =
     window.innerWidth < 768;
 
+  const { isSignedIn } = useUser();
+
   return (
 
     <div
@@ -33,35 +34,39 @@ function Layout() {
       }}
     >
 
-      {/* MOBILE BUTTON */}
+      {/* MOBILE MENU BUTTON */}
 
-      <button
-        onClick={() =>
-          setMobileMenu(!mobileMenu)
-        }
-        style={{
-          position: "fixed",
-          top: "20px",
-          left: "20px",
-          zIndex: 1000,
-          backgroundColor: "#2563eb",
-          color: "white",
-          border: "none",
-          padding: "12px 14px",
-          borderRadius: "10px",
-          cursor: "pointer",
-          display:
-            isMobile
-              ? "block"
-              : "none"
-        }}
-      >
-        ☰
-      </button>
+      {isSignedIn && (
+
+        <button
+          onClick={() =>
+            setMobileMenu(!mobileMenu)
+          }
+          style={{
+            position: "fixed",
+            top: "20px",
+            left: "20px",
+            zIndex: 1000,
+            backgroundColor: "#2563eb",
+            color: "white",
+            border: "none",
+            padding: "12px 14px",
+            borderRadius: "10px",
+            cursor: "pointer",
+            display:
+              isMobile
+                ? "block"
+                : "none"
+          }}
+        >
+          ☰
+        </button>
+
+      )}
 
       {/* SIDEBAR */}
 
-      <SignedIn>
+      {isSignedIn && (
 
         <div
           style={{
@@ -92,6 +97,8 @@ function Layout() {
           }}
         >
 
+          {/* LOGO */}
+
           <h1
             style={{
               color: "white",
@@ -105,6 +112,8 @@ function Layout() {
             HomeAgent AI
           </h1>
 
+          {/* USER */}
+
           <div
             style={{
               marginBottom: "30px",
@@ -115,6 +124,8 @@ function Layout() {
             <UserButton />
           </div>
 
+          {/* NAVIGATION */}
+
           <nav
             style={{
               display: "flex",
@@ -123,6 +134,8 @@ function Layout() {
             }}
           >
 
+            {/* DASHBOARD */}
+
             <Link
               to="/dashboard"
               onClick={() =>
@@ -130,6 +143,7 @@ function Layout() {
               }
               style={{
                 ...linkStyle,
+
                 backgroundColor:
                   location.pathname ===
                   "/dashboard"
@@ -140,6 +154,8 @@ function Layout() {
               🏠 Dashboard
             </Link>
 
+            {/* CHAT */}
+
             <Link
               to="/chat"
               onClick={() =>
@@ -147,6 +163,7 @@ function Layout() {
               }
               style={{
                 ...linkStyle,
+
                 backgroundColor:
                   location.pathname ===
                   "/chat"
@@ -157,6 +174,8 @@ function Layout() {
               💬 Chat
             </Link>
 
+            {/* SETTINGS */}
+
             <Link
               to="/settings"
               onClick={() =>
@@ -164,6 +183,7 @@ function Layout() {
               }
               style={{
                 ...linkStyle,
+
                 backgroundColor:
                   location.pathname ===
                   "/settings"
@@ -178,9 +198,9 @@ function Layout() {
 
         </div>
 
-      </SignedIn>
+      )}
 
-      {/* PAGE */}
+      {/* PAGE CONTENT */}
 
       <div
         style={{
@@ -189,7 +209,9 @@ function Layout() {
         }}
       >
 
-        <SignedOut>
+        {/* NOT CONNECTED */}
+
+        {!isSignedIn && (
 
           <div
             style={{
@@ -221,13 +243,15 @@ function Layout() {
 
           </div>
 
-        </SignedOut>
+        )}
 
-        <SignedIn>
+        {/* CONNECTED */}
+
+        {isSignedIn && (
 
           <Outlet />
 
-        </SignedIn>
+        )}
 
       </div>
 
@@ -248,7 +272,9 @@ const linkStyle = {
 
   borderRadius: "12px",
 
-  backgroundColor: "#1e293b"
+  backgroundColor: "#1e293b",
+
+  transition: "0.2s"
 
 };
 
