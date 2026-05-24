@@ -1,250 +1,125 @@
-import { useState } from "react";
-
-import toast from "react-hot-toast";
+import { useState, useEffect } from "react";
+import { useUser } from "@clerk/react";
 
 function Settings() {
+  const { user } = useUser();
 
-  const [apiKey, setApiKey] =
-    useState("");
+  const [name, setName] = useState("");
+  const [whatsAppNumber, setWhatsAppNumber] = useState("");
 
-  const [companyName, setCompanyName] =
-    useState("");
+  useEffect(() => {
+    if (!user) return;
 
-  const saveSettings = async () => {
-
-    // LOADING TOAST
-
-    const toastId =
-      toast.loading("Saving settings...");
-
-    try {
-
-      // FAKE API DELAY
-
-      await new Promise(resolve =>
-        setTimeout(resolve, 2000)
-      );
-
-      // SUCCESS TOAST
-
-      toast.success(
-        "Settings saved successfully",
-        {
-          id: toastId
+    fetch(
+      `${import.meta.env.VITE_API_URL}/api/agent-profile/${user.id}`
+    )
+      .then(res => res.json())
+      .then(data => {
+        if (data) {
+          setName(data.name || "");
+          setWhatsAppNumber(
+            data.whatsAppNumber || ""
+          );
         }
-      );
+      });
 
-    }
-    catch
-    {
-      // ERROR TOAST
+  }, [user]);
 
-      toast.error(
-        "Failed to save settings",
-        {
-          id: toastId
-        }
-      );
-    }
+  const saveProfile = async () => {
+
+    await fetch(
+      `${import.meta.env.VITE_API_URL}/api/agent-profile`,
+      {
+        method: "POST",
+
+        headers: {
+          "Content-Type":
+            "application/json"
+        },
+
+        body: JSON.stringify({
+          userId: user.id,
+          name: name,
+          whatsAppNumber:
+            whatsAppNumber
+        })
+      }
+    );
+
+    alert("Profile saved!");
   };
 
   return (
-
     <div
       style={{
         backgroundColor: "#020617",
-
         minHeight: "100vh",
-
         padding: "40px",
-
         color: "white"
       }}
     >
-
-      <h1
-        style={{
-          fontSize: "50px",
-
-          marginBottom: "30px"
-        }}
-      >
-        Settings
-      </h1>
-
-      {/* CARD */}
+      <h1>Settings</h1>
 
       <div
         style={{
-          backgroundColor: "#0f172a",
-
+          background: "#0f172a",
           padding: "30px",
-
           borderRadius: "20px",
-
-          maxWidth: "700px",
-
-          border:
-            "1px solid #1e293b"
+          maxWidth: "600px"
         }}
       >
 
-        {/* COMPANY */}
+        <input
+          placeholder="Agent name"
+          value={name}
+          onChange={(e) =>
+            setName(e.target.value)
+          }
+          style={inputStyle}
+        />
 
-        <div
-          style={{
-            marginBottom: "20px"
-          }}
-        >
-
-          <label
-            style={{
-              display: "block",
-
-              marginBottom: "10px",
-
-              color: "#94a3b8"
-            }}
-          >
-            Company Name
-          </label>
-
-          <input
-            value={companyName}
-
-            onChange={(e) =>
-              setCompanyName(
-                e.target.value
-              )
-            }
-
-            placeholder="Enter company name"
-
-            style={{
-              width: "100%",
-
-              padding: "16px",
-
-              borderRadius: "12px",
-
-              border:
-                "1px solid #334155",
-
-              backgroundColor:
-                "#1e293b",
-
-              color: "white",
-
-              fontSize: "16px",
-
-              boxSizing:
-                "border-box"
-            }}
-          />
-
-        </div>
-
-        {/* API KEY */}
-
-        <div
-          style={{
-            marginBottom: "20px"
-          }}
-        >
-
-          <label
-            style={{
-              display: "block",
-
-              marginBottom: "10px",
-
-              color: "#94a3b8"
-            }}
-          >
-            OpenAI API Key
-          </label>
-
-          <input
-            value={apiKey}
-
-            onChange={(e) =>
-              setApiKey(
-                e.target.value
-              )
-            }
-
-            placeholder="sk-..."
-
-            style={{
-              width: "100%",
-
-              padding: "16px",
-
-              borderRadius: "12px",
-
-              border:
-                "1px solid #334155",
-
-              backgroundColor:
-                "#1e293b",
-
-              color: "white",
-
-              fontSize: "16px",
-
-              boxSizing:
-                "border-box"
-            }}
-          />
-
-        </div>
-
-        {/* BUTTON */}
+        <input
+          placeholder="+14188056811"
+          value={whatsAppNumber}
+          onChange={(e) =>
+            setWhatsAppNumber(
+              e.target.value
+            )
+          }
+          style={inputStyle}
+        />
 
         <button
-          onClick={saveSettings}
-
-          style={{
-            backgroundColor:
-              "#2563eb",
-
-            color: "white",
-
-            border: "none",
-
-            padding:
-              "14px 22px",
-
-            borderRadius: "12px",
-
-            cursor: "pointer",
-
-            fontWeight: "bold",
-
-            transition:
-              "0.2s"
-          }}
-
-          onMouseEnter={(e) => {
-            e.target.style.transform =
-              "scale(1.03)";
-          }}
-
-          onMouseLeave={(e) => {
-            e.target.style.transform =
-              "scale(1)";
-          }}
+          onClick={saveProfile}
+          style={buttonStyle}
         >
-
-          Save Settings
-
+          Save Profile
         </button>
 
       </div>
-
     </div>
-
   );
 }
+
+const inputStyle = {
+  width: "100%",
+  padding: "15px",
+  marginBottom: "20px",
+  borderRadius: "12px",
+  border: "1px solid #334155",
+  background: "#1e293b",
+  color: "white",
+  fontSize: "16px"
+};
+
+const buttonStyle = {
+  background: "#2563eb",
+  color: "white",
+  border: "none",
+  padding: "15px 25px",
+  borderRadius: "12px",
+  cursor: "pointer",
+  fontWeight: "bold"
+};
 
 export default Settings;
