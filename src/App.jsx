@@ -1,10 +1,10 @@
 import { useState } from "react";
-
+import { useUser } from "@clerk/react";
 function App() {
 
   const [message, setMessage] =
     useState("");
-
+const { user } = useUser();
   const [messages, setMessages] =
     useState([]);
 
@@ -36,21 +36,21 @@ function App() {
       // API CALL
 
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/api/chat`,
-        {
-          method: "POST",
+  `${import.meta.env.VITE_API_URL}/api/chat`,
+  {
+    method: "POST",
 
-          headers: {
-            "Content-Type":
-              "application/json"
-          },
+    headers: {
+      "Content-Type": "application/json"
+    },
 
-          body: JSON.stringify({
-            sessionId: "user123",
-            message: message
-          })
-        }
-      );
+    body: JSON.stringify({
+      sessionId: user.id,
+      userId: user.id,
+      message: message
+    })
+  }
+);
 
       const data =
         await response.json();
