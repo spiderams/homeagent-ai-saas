@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useUser } from "@clerk/react";
-
+  console.log("API URL:", import.meta.env.VITE_API_URL);
+  console.log("USER ID:", user?.id);
 function Settings() {
   const { user } = useUser();
 
@@ -95,8 +96,7 @@ function Settings() {
         >
           Save Profile
         </button>
-console.log("API URL:", import.meta.env.VITE_API_URL);
-console.log("USER ID:", user?.id);
+
       </div>
     </div>
   );
