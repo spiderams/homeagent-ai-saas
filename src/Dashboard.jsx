@@ -56,7 +56,7 @@ function Dashboard() {
             borderRadius: "16px",
             marginBottom: "20px"
           }}
-        >
+        >Console.WriteLine($"MAPPED USER ID: {userId}");
           <h2>{lead.fullName || "Unknown"}</h2>
 
           <p>📞 {lead.phone}</p>
